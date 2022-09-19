@@ -2,38 +2,35 @@ defmodule SophosApp.Fibonacci_Server do
   alias SophosApp.Fibonacci
 
   def start() do
-    spawn(__MODULE__, :loop, [] )
+    spawn(__MODULE__, :loop, [0] )
   end
 
   def start_link() do
-    spawn_link(__MODULE__, :loop, [])
+    spawn_link(__MODULE__, :loop, [0])
   end
 
   def start_link() do
-    spawn_monitor(__MODULE__, :loop, [])
+    spawn_monitor(__MODULE__, :loop, [0])
   end
 
-  def loop() do
+  def loop(counter) do
     receive do
       {:sequence, caller, n} ->
         result = Fibonacci.sequence(n)
-        IO.inspect(caller)
-        IO.inspect(self())
         send(caller, {:fibonnacci, n, result})
 
-        loop()
+        loop(counter + 1)
 
-      {:status, msg} ->
-        IO.puts("Running #{inspect(msg)}")
-
-        loop()
+      {:status, caller} ->
+        send(caller, {:ok, counter})
+        loop(counter)
 
       {:exit, reason} ->
         IO.puts("bye for #{inspect(reason)}")
 
       _message ->
         IO.puts("Bad Operations")
-        loop()
+        loop(counter)
 
       #after
       #  1500 -> IO.puts("se acabó")
