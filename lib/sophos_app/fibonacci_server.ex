@@ -18,8 +18,8 @@ defmodule SophosApp.Fibonacci_Server do
       {:exit, reason} ->
         IO.puts("bye for #{inspect(reason)}")
 
-      message ->
-        IO.inspect(message)
+      _message ->
+        IO.puts("Bad Operations")
         loop()
 
       #after
