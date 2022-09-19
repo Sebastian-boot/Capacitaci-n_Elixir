@@ -1,10 +1,12 @@
 defmodule SophosApp.Fibonacci_Server do
-
+  alias SophosApp.Fibonacci
   def loop() do
     receive do
-      {:sequence, n} ->
-        Fibonacci.sequence(n)
-        |> IO.inspect()
+      {:sequence, caller, n} ->
+        result = Fibonacci.sequence(n)
+        IO.inspect(caller)
+        IO.inspect(self())
+        send(caller, {:fibonnacci, n, result})
 
         loop()
 
