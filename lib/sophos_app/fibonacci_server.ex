@@ -13,24 +13,24 @@ defmodule SophosApp.Fibonacci_Server do
     spawn_monitor(__MODULE__, :loop, [0])
   end
 
-  def loop(counter) do
+  def loop(state) do
     receive do
       {:sequence, caller, n} ->
         result = Fibonacci.sequence(n)
         send(caller, {:fibonnacci, n, result})
 
-        loop(counter + 1)
+        loop(state + 1)
 
       {:status, caller} ->
-        send(caller, {:ok, counter})
-        loop(counter)
+        send(caller, {:ok, state})
+        loop(state)
 
       {:exit, reason} ->
         IO.puts("bye for #{inspect(reason)}")
 
       _message ->
         IO.puts("Bad Operations")
-        loop(counter)
+        loop(state)
 
       #after
       #  1500 -> IO.puts("se acabó")
