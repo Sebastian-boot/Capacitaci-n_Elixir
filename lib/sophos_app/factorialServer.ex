@@ -1,16 +1,11 @@
 defmodule SophosApp.FactorialServer do
   alias SophosApp.Factorial
 
-  def handle_message(caller) do
-    receive do
-      {:compute, caller, n} ->
-        result = Factorial.of(n)
-        send(caller, {:fibonnacci, n, result})
-        handle_message(caller)
+  def handle_message({:compute, n}, _caller, state) do
+    {:ok, Factorial.of(n), state + 1}
+  end
 
-      {:status, caller} ->
-        send(caller, {:ok, caller})
-        handle_message(caller)
-    end
+  def handle_message({:status}, _caller, state) do
+    {:ok, state, state}
   end
 end
