@@ -7,9 +7,9 @@ defmodule SophosApp.FibonacciSupervisor do
   end
 
   def init(_args) do
-    childer = [FibonacciGenServer]
+    childen = [FibonacciGenServer]
 
-    Supervisor.init(childer, strategy: :one_for_one)
+    Supervisor.init(childen, strategy: :one_for_one)
   end
 
 end
